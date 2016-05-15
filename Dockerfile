@@ -2,7 +2,7 @@
 # Cartodb container
 #
 FROM ubuntu:14.04
-MAINTAINER Stefan Verhoeven <s.verhoeven@esciencecenter.nl>
+# MAINTAINER Stefan Verhoeven <s.verhoeven@esciencecenter.nl>
 
 # Configuring locales
 ENV DEBIAN_FRONTEND noninteractive
