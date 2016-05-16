@@ -20,6 +20,8 @@ How to build the container:
 ```
 git clone https://github.com/sverhoeven/docker-cartodb.git
 docker build -t="sverhoeven/cartodb" docker-cartodb/
+
+docker build -t="mapplus/cartodb" cartodb-docker/
 ```
 
 How to run the container:
@@ -28,6 +30,10 @@ How to run the container:
 ```
 docker run -d -p 3000:3000 -p 8080:8080 -p 8181:8181 sverhoeven/cartodb
 ```
+```
+docker run -d -p 3000:3000 -p 8080:8080 -p 8181:8181 mapplus/cartodb
+```
+
 
 You need to add `config/cartodb.nginx.proxy.conf` to /etc/nginx/conf.d/.
 This will setup a reverse proxy for the CartoDB/imports (3000), SQL Api (8080) and Map api (8181).

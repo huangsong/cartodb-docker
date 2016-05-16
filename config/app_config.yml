@@ -4,13 +4,13 @@ defaults: &defaults
     csv_guessing:     false
   debug_assets: true
   mandatory_keys:     [layer_opts, sql_api, varnish_management, redis, session_domain]
-  session_domain:     'cartodb.localhost'
+  session_domain:     '192.168.99.101:3000'
   # If activated, urls will use usernames in format //SESSION_DOMAIN/user/USERNAME and ignore subdomains if present
   subdomainless_urls: true
   http_port:           # 3000 # nil|integer. HTTP port to use when building urls. Leave empty to use default (80)
   https_port:          # nil|integer. HTTPS port to use when building urls. Leave empty to use default (443)
   secret_token:       '71c2b25921b84a1cb21c71503ab8fb23'
-  account_host:       'cartodb.localhost:3000'
+  account_host:       '192.168.99.101:3000'
   account_path:       '/account'
   data_library:
     username:         'common-data'
@@ -22,33 +22,33 @@ defaults: &defaults
     filter: 'mapnik'
     internal:
       protocol:      'http'
-      domain:        'cartodb.localhost'
+      domain:        '192.168.99.101'
       port:          '8181'
       host:          '127.0.0.1'
       verifycert:     false
     private:
       protocol:      'http'
-      domain:        'cartodb.localhost'
+      domain:        '192.168.99.101'
       port:          '80'
       verifycert:     false
     public:
       protocol:      'http'
-      domain:        'cartodb.localhost'
+      domain:        '192.168.99.101'
       port:          '80'
       verifycert:     false
   sql_api:
     private:
       protocol:   'http'
-      domain:     'cartodb.localhost'
+      domain:     '192.168.99.101:3000'
       endpoint:   '/api/v2/sql'
       port:       80
     public:
       protocol:   'http'
-      domain:     'cartodb.localhost'
+      domain:     '192.168.99.101:3000'
       endpoint:   '/api/v2/sql'
       port:       80
   api_requests_service_url: ''
-  developers_host:    'http://developers.cartodb.localhost:3000'
+  developers_host:    'http://192.168.99.101:3000/developers'
   google_analytics:
     primary:          ''
     embeds:           ''
@@ -101,7 +101,7 @@ defaults: &defaults
   common_data:
     protocol: 'https'
     username: 'common-data'
-    base_url: 'https://common-data.cartodb.com'
+    base_url: 'https://192.168.99.101:3000/common-data'
     format: 'shp'
   explore_api:
     username: ''
@@ -142,7 +142,7 @@ defaults: &defaults
       users_metadata:      5
       redis_migrator_logs: 6
   org_metadata_api:
-    host: 'localhost.lan'
+    host: '192.168.99.101'
     port: '3000'
     username: "extension"
     password: "elephant"
@@ -166,7 +166,7 @@ defaults: &defaults
       api_key: ''
       table_name: ''
     api:
-      host: 'cartodb.localhost'
+      host: '192.168.99.101'
       port: '8787'
       dbname: 'geocoder'
       user: 'geocoder'
@@ -214,10 +214,10 @@ defaults: &defaults
         interactivity:      "cartodb_id"
         debug:              false
         visible:            true
-        tiler_domain:       "cartodb.localhost"
+        tiler_domain:       "192.168.99.101"
         tiler_port:         "8181"
         tiler_protocol:     "http"
-        sql_domain:         "cartodb.localhost"
+        sql_domain:         "192.168.99.101"
         sql_port:           "8080"
         sql_protocol:       "http"
         extra_params:       { cache_policy: 'persist' }
@@ -229,7 +229,7 @@ defaults: &defaults
       kind: "background"
       options: { color: '#ffffff' }
   cartodb_com_hosted: false
-  cartodb_central_domain_name: 'cartodb.localhost'
+  cartodb_central_domain_name: '192.168.99.101:3000'
   aws:
     s3:
       access_key_id: "test"
@@ -239,9 +239,9 @@ defaults: &defaults
     # s3_bucket_name: "tests"
     max_file_size: 5242880 # 5.megabytes
   app_assets:
-    asset_host: "cartodb.localhost"
+    asset_host: "192.168.99.101:3000"
   avatars:
-    base_url: '//cartodb.localhost/assets/unversioned/images/avatars'
+    base_url: '//192.168.99.101:3000/assets/unversioned/images/avatars'
     kinds: ['ghost', 'marker', 'mountain', 'pacman', 'planet', 'star']
     colors: ['green', 'orange', 'red', 'yellow']
   dropbox_api_key: ""
