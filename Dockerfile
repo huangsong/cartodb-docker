@@ -151,24 +151,7 @@ RUN git clone git://github.com/CartoDB/CartoDB-SQL-API.git && \
 RUN git clone git://github.com/CartoDB/Windshaft-cartodb.git && \
       cd Windshaft-cartodb && ./configure && npm install && mkdir logs
 
-# Install CartoDB (with the bug correction on bundle install)
-RUN git clone git://github.com/CartoDB/cartodb.git
-ADD ./config/grunt_development.json /cartodb/config/grunt_development.json
-RUN cd cartodb && \
-      git submodule init && \
-      git submodule update && \
-      npm install && \
-      npm install -g grunt-cli && \
-      perl -pi -e 's/jwt \(1\.5\.3\)/jwt (1.5.4)/' Gemfile.lock && \
-      /bin/bash -l -c 'bundle install' || \
-      /bin/bash -l -c "cd $(/bin/bash -l -c 'gem contents \
-            debugger-ruby_core_source' | grep CHANGELOG | sed -e \
-            's,CHANGELOG.md,,') && /bin/bash -l -c 'rake add_source \
-            VERSION=$(/bin/bash -l -c 'ruby --version' | awk \
-            '{print $2}' | sed -e 's,p55,-p55,' )' && cd /cartodb && \
-            /bin/bash -l -c 'bundle install'"
-RUN cd cartodb && \      
-      /bin/bash -l -c "bundle exec grunt --environment development"
+
 
 # Geocoder SQL client + server
 RUN git clone https://github.com/CartoDB/data-services &&\
@@ -183,17 +166,44 @@ RUN git clone https://github.com/CartoDB/data-services &&\
   createdb -U postgres -E UTF8 -O geocoder geocoder &&\
   echo 'CREATE EXTENSION plpythonu;CREATE EXTENSION postgis;CREATE EXTENSION cartodb;CREATE EXTENSION cdb_geocoder;CREATE EXTENSION plproxy;CREATE EXTENSION cdb_dataservices_server;CREATE EXTENSION cdb_dataservices_client;' | psql -U geocoder geocoder &&\
   service postgresql stop
-# Copy confs
-ADD ./config/CartoDB-dev.js \
-      /CartoDB-SQL-API/config/environments/development.js
-ADD ./config/WS-dev.js \
-      /Windshaft-cartodb/config/environments/development.js
+
+
+
+
+# Install CartoDB (with the bug correction on bundle install)
+RUN git clone git://github.com/CartoDB/cartodb.git
+RUN cd cartodb && \
+      git submodule init && \
+      git submodule update && \
+      npm install && \
+      npm install -g grunt-cli && \
+ADD ./config/grunt_development.json /cartodb/config/grunt_development.json
 ADD ./config/app_config.yml /cartodb/config/app_config.yml
 ADD ./config/database.yml /cartodb/config/database.yml
 ADD ./create_dev_user /cartodb/script/create_dev_user
 ADD ./setup_organization.sh /cartodb/script/setup_organization.sh
 
+
+RUN cd cartodb && \
+      perl -pi -e 's/jwt \(1\.5\.3\)/jwt (1.5.4)/' Gemfile.lock && \
+      /bin/bash -l -c 'bundle install' || \
+      /bin/bash -l -c "cd $(/bin/bash -l -c 'gem contents \
+            debugger-ruby_core_source' | grep CHANGELOG | sed -e \
+            's,CHANGELOG.md,,') && /bin/bash -l -c 'rake add_source \
+            VERSION=$(/bin/bash -l -c 'ruby --version' | awk \
+            '{print $2}' | sed -e 's,p55,-p55,' )' && cd /cartodb && \
+            /bin/bash -l -c 'bundle install'"
+RUN cd cartodb && \      
+      /bin/bash -l -c "bundle exec grunt --environment development"
+
 ADD ./assets/gstaticfonts /cartodb/public/assets/
+
+
+# Copy confs
+ADD ./config/CartoDB-dev.js \
+      /CartoDB-SQL-API/config/environments/development.js
+ADD ./config/WS-dev.js \
+      /Windshaft-cartodb/config/environments/development.js
 
 ENV PATH /usr/local/rvm/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 RUN service postgresql start && service redis-server start && \
